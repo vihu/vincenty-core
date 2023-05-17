@@ -1,4 +1,4 @@
-name: vincenty-core
+name: CI
 
 on:
   pull_request:
@@ -12,25 +12,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          default: true
-          override: true
           components: clippy, rustfmt
 
       - name: Check
         run: cargo check --release
 
-      - name: Check formatting
+      - name: Build
+        run: cargo build --release
+
+      - name: Formatting
         run: cargo fmt -- --check
 
       - name: Clippy
-        uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: -- -W clippy::all
+        run: cargo clippy -- -Dclippy:all -D warnings
 
-      - name: Run tests
+      - name: Tests
         run: cargo test --release
