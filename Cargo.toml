@@ -11,6 +11,10 @@ categories = ["api", "geolocation"]
 license = "Apache-2.0"
 authors = ["Rahul Garg <rg@vihu.dev>"]
 
+[lib]
+name = "vincenty_core"
+path = "src/lib.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
