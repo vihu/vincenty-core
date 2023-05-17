@@ -1,6 +1,6 @@
 [package]
 name = "vincenty-core"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 description = "Calculate distances between two coordinates using vincenty formulae"
 repository = "https://github.com/vihu/vincenty-core"
