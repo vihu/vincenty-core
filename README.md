@@ -28,13 +28,19 @@ Features:
 Add the module to your Rust project and use it as follows:
 
 ```rust
-use geo_types::geometry::Coord; use your_module_name;
+use geo_types::geometry::Coord;
+use vincenty_core::{distance_from_coords, distance_from_points};
 
-let coord1 = Coord { x: 40.712776, y: -74.005974 };
-let coord2 = Coord { x: 34.052235, y: -118.243683 };
+let x1 = 40.712776;
+let y1 = -74.005974;
+let x2 = 34.052235;
+let y2 = -118.243683;
+let coord1 = Coord { x: x1, y: y1 };
+let coord2 = Coord { x: x2, y: y2 };
 
-let distance = your_module_name::distance_from_coordinates(&coord1, &coord2);
-println!("Distance between New York and Los Angeles: {} km", distance.unwrap());
+let distance1 = distance_from_coordinates(&coord1, &coord2);
+let distance2 = distance_from_points(x1, y1, x2, y2);
+assert_eq!(distance1, distance2);
 ```
 
 ## Testing
