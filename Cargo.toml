@@ -8,7 +8,7 @@ homepage = "https://github.com/vihu/vincenty-core"
 readme = "README.md"
 keywords = ["vincenty", "geolocation", "geolib", "tide"]
 categories = ["api", "geolocation"]
-license = "MIT OR Apache-2.0"
+license = "Apache-2.0"
 authors = ["Rahul Garg <rg@vihu.dev>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
