@@ -188,6 +188,11 @@ mod tests {
         assert_eq!(
             distance_from_points(39.152501, -84.412977, 39.152505, -84.412946).unwrap(),
             0.002716
+        );
+        // x1, y1: the white house - x2, y2: statue of liberty
+        assert_eq!(
+            distance_from_points(38.89785, -77.03653, 40.68943, -74.04449).unwrap(),
+            324.377429
         )
     }
 }
