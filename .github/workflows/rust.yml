@@ -19,33 +19,18 @@ jobs:
           default: true
           override: true
           components: clippy, rustfmt
-      - uses: Swatinem/rust-cache@v1
-        with:
-          key: ${{ runner.os }}-checkout
 
       - name: Check
         run: cargo check --release
-      - uses: Swatinem/rust-cache@v1
-        with:
-          key: ${{ runner.os }}-check
 
       - name: Check formatting
         run: cargo fmt -- --check
-      - uses: Swatinem/rust-cache@v1
-        with:
-          key: ${{ runner.os }}-fmt
 
       - name: Clippy
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: -- -Dclippy::all
-      - uses: Swatinem/rust-cache@v1
-        with:
-          key: ${{ runner.os }}-clippy
+          args: -- -W clippy::all
 
       - name: Run tests
         run: cargo test --release
-      - uses: Swatinem/rust-cache@v1
-        with:
-          key: ${{ runner.os }}-test
