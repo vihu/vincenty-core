@@ -8,10 +8,38 @@ const MAX_ITERATIONS: u32 = 200;
 const CONVERGENCE_THRESHOLD: f64 = 0.000_000_000_001;
 const PRECISION: i32 = 6;
 
-pub fn distance(c1: &Coord, c2: &Coord) -> Result<f64> {
-    let u1 = f64::atan((1.0 - FLATTENING_ELIPSOID) * f64::tan(f64::to_radians(c1.x)));
-    let u2 = f64::atan((1.0 - FLATTENING_ELIPSOID) * f64::tan(f64::to_radians(c2.x)));
-    let init_lambda = f64::to_radians(c2.y - c1.y);
+/// Calculate the geodesic distance in Km using geo_types::geometry::Coord.
+///
+/// # Arguments
+///
+/// * `c1` - A geo_types::geometry::Coord object representing the first point.
+/// * `c2` - A geo_types::geometry::Coord object representing the second point.
+///
+/// # Returns
+///
+/// * `Result<f64>` - The geodesic distance between the points in kilometers.
+/// Returns an error if the approximation does not finish within the maximum number of iterations.
+pub fn distance_from_coords(c1: &Coord, c2: &Coord) -> Result<f64> {
+    distance_from_points(c1.x, c1.y, c2.x, c2.y)
+}
+
+/// Calculate the geodesic distance in Km using points.
+///
+/// # Arguments
+///
+/// * `x1` - An f64 representing latitude of point 1.
+/// * `y1` - An f64 representing longitude of point 1.
+/// * `x2` - An f64 representing latitude of point 2.
+/// * `y2` - An f64 representing longitude of point 2.
+///
+/// # Returns
+///
+/// * `Result<f64>` - The geodesic distance between the points in kilometers.
+/// Returns an error if the approximation does not finish within the maximum number of iterations.
+pub fn distance_from_points(x1: f64, y1: f64, x2: f64, y2: f64) -> Result<f64> {
+    let u1 = f64::atan((1.0 - FLATTENING_ELIPSOID) * f64::tan(f64::to_radians(x1)));
+    let u2 = f64::atan((1.0 - FLATTENING_ELIPSOID) * f64::tan(f64::to_radians(x2)));
+    let init_lambda = f64::to_radians(y2 - y1);
     let lambda = init_lambda;
     let sin_u1 = f64::sin(u1);
     let cos_u1 = f64::cos(u1);
@@ -22,6 +50,7 @@ pub fn distance(c1: &Coord, c2: &Coord) -> Result<f64> {
     approximate(init_lambda, lambda, sin_u1, cos_u1, sin_u2, cos_u2)
 }
 
+/// Internal function to run approximation upto 200 max iterations.
 fn approximate(
     init_lambda: f64,
     mut lambda: f64,
@@ -83,6 +112,7 @@ fn approximate(
     bail!("unable to finish approximation!")
 }
 
+/// Internal function to evaluate once convergence threshold is reached.
 fn evaluate(
     cos_sqalpha: f64,
     sin_sigma: f64,
@@ -123,19 +153,24 @@ mod tests {
     #[test]
     fn identity() {
         assert_eq!(
-            distance(&coord! {x: 0.0, y: 0.0}, &coord! {x: 0.0, y: 0.0}).unwrap(),
+            distance_from_coords(&coord! {x: 0.0, y: 0.0}, &coord! {x: 0.0, y: 0.0}).unwrap(),
             0.0
         );
+        assert_eq!(distance_from_points(0.0, 0.0, 0.0, 0.0).unwrap(), 0.0);
     }
 
     #[test]
     fn basic() {
         assert_eq!(
-            distance(
+            distance_from_coords(
                 &coord! {x: 42.3541165, y: -71.0693514},
                 &coord! {x: 40.7791472, y: -73.9680804},
             )
             .unwrap(),
+            298.396186
+        );
+        assert_eq!(
+            distance_from_points(42.3541165, -71.0693514, 40.7791472, -73.9680804).unwrap(),
             298.396186
         )
     }
@@ -143,11 +178,15 @@ mod tests {
     #[test]
     fn known() {
         assert_eq!(
-            distance(
+            distance_from_coords(
                 &coord! {x: 39.152501, y: -84.412977},
                 &coord! {x: 39.152505, y: -84.412946},
             )
             .unwrap(),
+            0.002716
+        );
+        assert_eq!(
+            distance_from_points(39.152501, -84.412977, 39.152505, -84.412946).unwrap(),
             0.002716
         )
     }
