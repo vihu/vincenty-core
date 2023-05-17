@@ -1,0 +1,18 @@
+[package]
+name = "vincenty-core"
+version = "0.1.0"
+edition = "2021"
+description = "Calculate distances between two coordinates using vincenty formulae"
+repository = "https://github.com/vihu/vincenty-core"
+homepage = "https://github.com/vihu/vincenty-core"
+readme = "README.md"
+keywords = ["vincenty", "geolocation", "geolib", "tide"]
+categories = ["api", "geolocation"]
+license = "MIT OR Apache-2.0"
+authors = ["Rahul Garg <rg@vihu.dev>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+geo-types = "0.7.9"
+anyhow = "1.0.71"
